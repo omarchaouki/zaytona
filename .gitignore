@@ -1,0 +1,20 @@
+node_modules
+.output
+.nitro
+.tanstack
+dist
+.env
+.env.*
+!.env.example
+uploads/
+coverage/
+test-results/
+playwright-report/
+*.log
+.data/
+
+# Loose photo downloads at the project root (the site's photos live in assets/source)
+/*.jfif
+/*.webp
+/*.avif
+/*.jpg
