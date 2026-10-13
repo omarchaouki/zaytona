@@ -256,7 +256,8 @@ function OfferCard({
         </div>
       </div>
       {editable ? (
-        <div className="flex gap-1">
+        // Stacked on phones so the name, price and badges keep the width.
+        <div className="flex flex-col gap-1 sm:flex-row">
           <button
             type="button"
             onClick={() => setEditing(true)}

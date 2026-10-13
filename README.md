@@ -100,7 +100,7 @@ After `git pull`: `pnpm install` then `pnpm db:migrate`, then `pnpm dev`.
 | `pnpm db:seed` | Fill what is missing: default settings, demo products/FAQ (flagged `is_demo`), draft policy pages, owner admin. Never overwrites edits. |
 | `pnpm admin:reset-password` | Reset the `ADMIN_EMAIL` account to `ADMIN_PASSWORD`, sign out all sessions, force a new password |
 | `pnpm db:local` | Embedded Postgres (PGlite) on port 5433 for machines without Docker |
-| `pnpm audit:mobile` | With the app running: checks every public page (both languages) at 320–412 px, phone landscape, 768 and 1024 px for content sticking out of the screen or out of its box, text under 12 px and tap targets under 44 px. With `AUDIT_ADMIN_EMAIL` / `AUDIT_ADMIN_PASSWORD` set, also every admin page. `SHOTS_BASE` points it at another server (e.g. the production build). Exits non-zero on any finding. |
+| `pnpm audit:mobile` | With the app running: checks every public page (both languages) at 320–412 px, phone landscape, 768 and 1024 px for content sticking out of the screen or out of its box, text under 12 px and tap targets under 44 px. With `AUDIT_ADMIN_EMAIL` / `AUDIT_ADMIN_PASSWORD` set, also every admin page, in Arabic and in French (the account's language is put back afterwards). `SHOTS_BASE` points it at another server (e.g. the production build). Exits non-zero on any finding. |
 | `pnpm images` | Re-encode photos in `assets/source/` to responsive AVIF/WebP in `public/images/`, and regenerate the share images `og-ar.jpg` / `og-fr.jpg` |
 
 ## Environment variables

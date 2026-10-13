@@ -499,7 +499,11 @@
       "bulkReject": "Refuser la sélection",
       "done": "{count} avis mis à jour.",
       "photo": "Photo du client",
-      "more": "Voir plus"
+      "more": "Voir plus",
+      "featureShort": "Épingler",
+      "unfeatureShort": "Désépingler",
+      "editShort": "Modifier",
+      "deleteShort": "Supprimer"
     },
     "trust": {
       "title": "Certificats et autorisations",

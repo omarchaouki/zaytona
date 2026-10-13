@@ -90,9 +90,9 @@ function ReviewsAdmin() {
       <h1 className="text-h2">{t('admin.reviews.title')}</h1>
 
       <div className="mt-g3 flex flex-col gap-g1 sm:flex-row sm:items-center">
-        {/* Segmented control: four equal parts on phones, natural widths from 640px. */}
+        {/* Segmented control: full width on phones, each tab as wide as its label. */}
         <div
-          className="grid grid-cols-4 gap-1 rounded-full bg-white p-1 ring-1 ring-sand-deep sm:inline-flex sm:gap-g1"
+          className="flex gap-1 rounded-full bg-white p-1 ring-1 ring-sand-deep sm:inline-flex sm:gap-g1"
           role="tablist"
         >
           {tabs.map((tab) => (
@@ -106,7 +106,7 @@ function ReviewsAdmin() {
                 void navigate({ search: (p) => ({ ...p, status: tab.key }) })
               }}
               className={cn(
-                'tap inline-flex min-w-0 items-center justify-center gap-1.5 rounded-full px-2 text-sm font-medium transition-colors sm:px-4',
+                'tap inline-flex flex-auto items-center justify-center gap-1 rounded-full px-2 text-sm font-medium whitespace-nowrap transition-colors sm:flex-none sm:gap-1.5 sm:px-4',
                 current === tab.key ? 'bg-olive text-limewash' : 'text-ink hover:bg-sand',
               )}
             >
@@ -375,81 +375,97 @@ function ReviewRow({
               {t('admin.reviews.rejection', { reason: row.rejectionReason })}
             </p>
           ) : null}
-
-          {rejecting ? (
-            <div className="mt-g2 flex flex-wrap items-end gap-g1">
-              <label className="block min-w-[14rem] flex-1">
-                <span className="mb-1 block text-sm font-medium text-olive">
-                  {t('admin.reviews.rejectReason')}
-                </span>
-                <input
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  maxLength={300}
-                  className="field-input min-h-11"
-                />
-              </label>
-              <Button
-                size="md"
-                variant="outline"
-                className="border-danger/40 text-danger"
-                onClick={() => act({ type: 'reject', reason: reason || undefined })}
-              >
-                {t('admin.reviews.reject')}
-              </Button>
-              <Button size="md" variant="ghost" onClick={() => setRejecting(false)}>
-                {t('admin.trust.cancel')}
-              </Button>
-            </div>
-          ) : (
-            <div className="mt-g2 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap [&>button]:w-full sm:[&>button]:w-auto">
-              {row.status !== 'approved' ? (
-                <Button
-                  size="md"
-                  className="col-span-2 bg-oil text-olive-950 hover:bg-oil-bright"
-                  onClick={() => act({ type: 'approve' })}
-                >
-                  <Check aria-hidden="true" />
-                  {t('admin.reviews.approve')}
-                </Button>
-              ) : null}
-              {row.status !== 'rejected' ? (
-                <Button size="md" variant="outline" onClick={() => setRejecting(true)}>
-                  <X aria-hidden="true" />
-                  {t('admin.reviews.reject')}
-                </Button>
-              ) : null}
-              <Button
-                size="md"
-                variant="outline"
-                onClick={() => act({ type: 'feature', featured: !row.isFeatured })}
-              >
-                {row.isFeatured ? <PinOff aria-hidden="true" /> : <Pin aria-hidden="true" />}
-                {row.isFeatured ? t('admin.reviews.unfeature') : t('admin.reviews.feature')}
-              </Button>
-              <Button size="md" variant="outline" onClick={() => setEditing(true)}>
-                <Pencil aria-hidden="true" />
-                {t('admin.reviews.edit')}
-              </Button>
-              {isOwner ? (
-                <Button
-                  size="md"
-                  variant="outline"
-                  className="border-danger/40 text-danger hover:bg-danger/5"
-                  onClick={async () => {
-                    if (!window.confirm(t('admin.reviews.deleteConfirm'))) return
-                    await remove({ data: { ids: [row.id] } })
-                    await onChanged()
-                  }}
-                >
-                  <Trash2 aria-hidden="true" />
-                  {t('admin.reviews.delete')}
-                </Button>
-              ) : null}
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Actions: full card width on phones (2 columns, short labels), beside the content from 640px. */}
+      {rejecting ? (
+        <div className="mt-g2 flex flex-wrap items-end gap-g1 border-t border-sand-deep/50 pt-g2 sm:ms-9 sm:border-0 sm:pt-0">
+          <label className="block w-full min-w-0 sm:w-auto sm:min-w-[14rem] sm:flex-1">
+            <span className="mb-1 block text-sm font-medium text-olive">
+              {t('admin.reviews.rejectReason')}
+            </span>
+            <input
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              maxLength={300}
+              className="field-input min-h-11"
+            />
+          </label>
+          <Button
+            size="md"
+            variant="outline"
+            className="border-danger/40 text-danger"
+            onClick={() => act({ type: 'reject', reason: reason || undefined })}
+          >
+            {t('admin.reviews.reject')}
+          </Button>
+          <Button size="md" variant="ghost" onClick={() => setRejecting(false)}>
+            {t('admin.trust.cancel')}
+          </Button>
+        </div>
+      ) : (
+        <div className="mt-g2 grid grid-cols-2 gap-2 border-t border-sand-deep/50 pt-g2 sm:ms-9 sm:flex sm:flex-wrap sm:border-0 sm:pt-0 [&>button]:w-full [&>button]:min-w-0 [&>button]:gap-1.5 [&>button]:px-3 [&>button]:leading-tight [&>button]:whitespace-normal sm:[&>button]:w-auto sm:[&>button]:px-5 sm:[&>button]:whitespace-nowrap">
+          {row.status !== 'approved' ? (
+            <Button
+              size="md"
+              className="col-span-2 bg-oil text-olive-950 hover:bg-oil-bright"
+              onClick={() => act({ type: 'approve' })}
+            >
+              <Check aria-hidden="true" />
+              {t('admin.reviews.approve')}
+            </Button>
+          ) : null}
+          {row.status !== 'rejected' ? (
+            <Button size="md" variant="outline" onClick={() => setRejecting(true)}>
+              <X aria-hidden="true" />
+              {t('admin.reviews.reject')}
+            </Button>
+          ) : null}
+          <Button
+            size="md"
+            variant="outline"
+            onClick={() => act({ type: 'feature', featured: !row.isFeatured })}
+          >
+            {row.isFeatured ? <PinOff aria-hidden="true" /> : <Pin aria-hidden="true" />}
+            {row.isFeatured ? (
+              <ActionLabel short="admin.reviews.unfeatureShort" long="admin.reviews.unfeature" />
+            ) : (
+              <ActionLabel short="admin.reviews.featureShort" long="admin.reviews.feature" />
+            )}
+          </Button>
+          <Button size="md" variant="outline" onClick={() => setEditing(true)}>
+            <Pencil aria-hidden="true" />
+            <ActionLabel short="admin.reviews.editShort" long="admin.reviews.edit" />
+          </Button>
+          {isOwner ? (
+            <Button
+              size="md"
+              variant="outline"
+              className="border-danger/40 text-danger hover:bg-danger/5"
+              onClick={async () => {
+                if (!window.confirm(t('admin.reviews.deleteConfirm'))) return
+                await remove({ data: { ids: [row.id] } })
+                await onChanged()
+              }}
+            >
+              <Trash2 aria-hidden="true" />
+              <ActionLabel short="admin.reviews.deleteShort" long="admin.reviews.delete" />
+            </Button>
+          ) : null}
+        </div>
+      )}
     </li>
+  )
+}
+
+/** Short label on phones (two buttons per row), the full one from 640px. */
+function ActionLabel({ short, long }: { short: MessageKey; long: MessageKey }) {
+  const t = useT()
+  return (
+    <>
+      <span className="sm:hidden">{t(short)}</span>
+      <span className="hidden sm:inline">{t(long)}</span>
+    </>
   )
 }

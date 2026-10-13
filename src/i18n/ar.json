@@ -499,7 +499,11 @@
       "bulkReject": "رفض المحدد",
       "done": "تم تحديث {count} رأي.",
       "photo": "صورة الزبون",
-      "more": "عرض المزيد"
+      "more": "عرض المزيد",
+      "featureShort": "تثبيت",
+      "unfeatureShort": "فك التثبيت",
+      "editShort": "تعديل ورد",
+      "deleteShort": "حذف"
     },
     "trust": {
       "title": "الشهادات والتراخيص",

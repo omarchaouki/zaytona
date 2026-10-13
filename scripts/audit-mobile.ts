@@ -7,7 +7,8 @@
  *     every public page, in Arabic and French
  *   AUDIT_ADMIN_EMAIL=… AUDIT_ADMIN_PASSWORD=… pnpm audit:mobile
  *     also every admin page (dashboard, orders, an order, offers, reviews,
- *     certificates, settings, password), signed in with that account
+ *     certificates, settings, password) in Arabic and in French, signed in
+ *     with that account (its language is put back afterwards)
  */
 import { type Browser, chromium, type Page } from '@playwright/test'
 
@@ -175,6 +176,39 @@ const hydrated = (page: Page) =>
     timeout: 90_000,
   })
 
+async function signIn(page: Page, email: string, password: string) {
+  await page.goto(`${BASE}/admin/login`, { waitUntil: 'load' })
+  await hydrated(page)
+  await page.locator('input[type=email]').fill(email)
+  await page.locator('input[type=password]').fill(password)
+  await page.locator('form button[type=submit]').click()
+  await page.waitForURL(/\/admin\/?$/, { timeout: 30_000, waitUntil: 'commit' })
+  // A fresh load, so the page (and its lang) is the admin's, not the login page's.
+  await page.goto(`${BASE}/admin`, { waitUntil: 'load' })
+  await hydrated(page)
+}
+
+/** The admin language is saved on the account: switch it with the sidebar button. */
+async function setAdminLocale(browser: Browser, email: string, password: string, locale: string) {
+  const page = await newPage(browser, 1280, 800)
+  await signIn(page, email, password)
+  const before = await page.evaluate(() => document.documentElement.lang.slice(0, 2))
+  if (before !== locale) {
+    await page
+      .getByRole('button', { name: /^(Français|العربية)$/ })
+      .first()
+      .click()
+    // The choice is saved on the server; a reload shows whether it took.
+    await page.waitForTimeout(1500)
+    await page.reload({ waitUntil: 'load' })
+    await hydrated(page)
+    const after = await page.evaluate(() => document.documentElement.lang.slice(0, 2))
+    if (after !== locale) throw new Error(`admin language still ${after}, wanted ${locale}`)
+  }
+  await page.close()
+  return before
+}
+
 async function main() {
   const browser = await chromium.launch()
   let total = 0
@@ -193,33 +227,34 @@ async function main() {
   const email = process.env.AUDIT_ADMIN_EMAIL
   const password = process.env.AUDIT_ADMIN_PASSWORD
   if (email && password) {
-    for (const [width, height] of SIZES) {
-      const page = await newPage(browser, width, height)
-      await page.goto(`${BASE}/admin/login`, { waitUntil: 'load' })
-      await hydrated(page)
-      await page.locator('input[type=email]').fill(email)
-      await page.locator('input[type=password]').fill(password)
-      await page.locator('form button[type=submit]').click()
-      await page.waitForURL(/\/admin\/?$/, { timeout: 30_000, waitUntil: 'commit' })
-      for (const path of ADMIN_PAGES) {
-        let url = path
-        if (path === 'ORDER') {
-          const href = await page
-            .locator('a[href^="/admin/orders/"]')
-            .first()
-            .getAttribute('href')
-            .catch(() => null)
-          if (!href) continue
-          url = href
+    let original: string | null = null
+    for (const adminLocale of ['ar', 'fr']) {
+      const previous = await setAdminLocale(browser, email, password, adminLocale)
+      original ??= previous
+      for (const [width, height] of SIZES) {
+        const page = await newPage(browser, width, height)
+        await signIn(page, email, password)
+        for (const path of ADMIN_PAGES) {
+          let url = path
+          if (path === 'ORDER') {
+            const href = await page
+              .locator('a[href^="/admin/orders/"]')
+              .first()
+              .getAttribute('href')
+              .catch(() => null)
+            if (!href) continue
+            url = href
+          }
+          await page.goto(`${BASE}${url}`, { waitUntil: 'load' })
+          await hydrated(page)
+          await page.waitForTimeout(1200)
+          const tag = `${url.replace(/[0-9a-f-]{36}/, ':id')} (${adminLocale}) ${width}×${height}`
+          total += await report(page, tag, url === '/admin')
         }
-        await page.goto(`${BASE}${url}`, { waitUntil: 'load' })
-        await hydrated(page)
-        await page.waitForTimeout(1200)
-        const tag = `${url.replace(/[0-9a-f-]{36}/, ':id')} ${width}×${height}`
-        total += await report(page, tag, url === '/admin')
+        await page.close()
       }
-      await page.close()
     }
+    if (original) await setAdminLocale(browser, email, password, original)
   } else {
     console.log('\n(admin pages skipped: set AUDIT_ADMIN_EMAIL and AUDIT_ADMIN_PASSWORD)')
   }
