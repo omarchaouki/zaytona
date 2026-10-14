@@ -109,11 +109,12 @@ function inspect(): Finding[] {
       })
     }
     // Text fields squeezed too narrow to type in (e.g. a search box crushed by a row of tabs).
+    // A select only shows its chosen option, so it may be narrower (e.g. "10" per page).
     if (
       el.matches(
         'input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]), textarea, select',
       ) &&
-      r.width < 120 &&
+      r.width < (el.matches('select') ? 72 : 120) &&
       !el.closest('[class*="w-11"], [class*="w-9"]')
     ) {
       out.push({
@@ -194,12 +195,16 @@ async function setAdminLocale(browser: Browser, email: string, password: string,
   await signIn(page, email, password)
   const before = await page.evaluate(() => document.documentElement.lang.slice(0, 2))
   if (before !== locale) {
+    // The choice is saved on the server: wait for that call, then reload to check it took.
+    const saved = page.waitForResponse(
+      (r) => r.url().includes('/_serverFn/') && r.request().method() === 'POST',
+      { timeout: 30_000 },
+    )
     await page
       .getByRole('button', { name: /^(Français|العربية)$/ })
       .first()
       .click()
-    // The choice is saved on the server; a reload shows whether it took.
-    await page.waitForTimeout(1500)
+    await saved
     await page.reload({ waitUntil: 'load' })
     await hydrated(page)
     const after = await page.evaluate(() => document.documentElement.lang.slice(0, 2))

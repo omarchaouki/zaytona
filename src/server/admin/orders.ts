@@ -28,7 +28,7 @@ import {
   settings,
   whatsappClicks,
 } from '~/db/schema'
-import { type OrderFilters, PAGE_SIZE } from '~/lib/admin-orders'
+import { type OrderFilters, pageSizeOf } from '~/lib/admin-orders'
 import { normalizeMoroccanPhone } from '~/lib/phone'
 import { parseSetting } from '~/lib/settings'
 
@@ -77,6 +77,7 @@ export async function listOrders(db: Database, f: OrderFilters) {
   }[f.sort ?? 'createdAt']
   const order = (f.dir ?? 'desc') === 'asc' ? asc(sortColumn) : desc(sortColumn)
   const page = f.page ?? 1
+  const pageSize = pageSizeOf(f)
 
   const [rows, [totals]] = await Promise.all([
     db
@@ -97,11 +98,11 @@ export async function listOrders(db: Database, f: OrderFilters) {
       .from(orders)
       .where(where)
       .orderBy(order, desc(orders.number))
-      .limit(PAGE_SIZE)
-      .offset((page - 1) * PAGE_SIZE),
+      .limit(pageSize)
+      .offset((page - 1) * pageSize),
     db.select({ n: count() }).from(orders).where(where),
   ])
-  return { rows, total: totals?.n ?? 0, page, pageSize: PAGE_SIZE }
+  return { rows, total: totals?.n ?? 0, page, pageSize }
 }
 
 /** All matching orders (no paging) for CSV export, with their items. */

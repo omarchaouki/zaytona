@@ -419,7 +419,8 @@ function StatusCard({ data }: { data: Detail }) {
 
   return (
     <Card title={t('admin.order.status')}>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+      {/* As many columns as fit (1 to 3), never narrower than "Confirmée". */}
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(8.5rem,1fr))] gap-2">
         {ORDER_STATUSES.map((s) => (
           <label
             key={s}

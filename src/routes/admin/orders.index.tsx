@@ -13,6 +13,8 @@ import {
   ArrowUp,
   ArrowUpDown,
   BadgeCheck,
+  ChevronLeft,
+  ChevronRight,
   Download,
   Search,
   SlidersHorizontal,
@@ -26,7 +28,13 @@ import { ConfirmDelete } from '~/components/admin/ConfirmDelete'
 import { useUnseenOrders } from '~/components/admin/OrderNotifications'
 import { Button } from '~/components/ui/button'
 import { useLocale, useT } from '~/i18n'
-import { ORDER_STATUSES, type OrderFilters, orderFiltersSchema } from '~/lib/admin-orders'
+import {
+  DEFAULT_PAGE_SIZE,
+  ORDER_STATUSES,
+  type OrderFilters,
+  orderFiltersSchema,
+  PAGE_SIZES,
+} from '~/lib/admin-orders'
 import { cn } from '~/lib/cn'
 import { formatMad, formatNumber } from '~/lib/format'
 import { formatPhoneDisplay } from '~/lib/phone'
@@ -53,6 +61,17 @@ export const Route = createFileRoute('/admin/orders/')({
 })
 
 type Row = Awaited<ReturnType<typeof getOrdersPage>>['rows'][number]
+
+/** The admin's "orders per page" choice, remembered on this device. */
+const SIZE_KEY = 'admin-orders-page-size'
+function storedPageSize(): number | null {
+  try {
+    const n = Number(localStorage.getItem(SIZE_KEY))
+    return (PAGE_SIZES as readonly number[]).includes(n) ? n : null
+  } catch {
+    return null
+  }
+}
 type SortKey = NonNullable<OrderFilters['sort']>
 
 function OrdersPage() {
@@ -93,6 +112,31 @@ function OrdersPage() {
     }, 350)
     return () => window.clearTimeout(id)
   })
+
+  // Opened without a size in the link: use the one chosen last time on this device.
+  useEffect(() => {
+    if (filters.size) return
+    const stored = storedPageSize()
+    if (stored && stored !== DEFAULT_PAGE_SIZE) {
+      void navigate({ search: (prev) => ({ ...prev, size: stored }), replace: true })
+    }
+  }, [filters.size, navigate])
+
+  /** New page size, keeping the first order on screen in view. */
+  function setPageSize(size: number) {
+    try {
+      localStorage.setItem(SIZE_KEY, String(size))
+    } catch {}
+    const page = Math.floor(((data.page - 1) * data.pageSize) / size) + 1
+    setSelection({})
+    void navigate({
+      search: (prev) => ({
+        ...prev,
+        size: size === DEFAULT_PAGE_SIZE ? undefined : size,
+        page: page > 1 ? page : undefined,
+      }),
+    })
+  }
 
   function setFilters(patch: Partial<OrderFilters>) {
     setSelection({})
@@ -530,7 +574,7 @@ function OrdersPage() {
       />
 
       {/* Phones: one card per order (no sideways scrolling). */}
-      <ul className="mt-4 grid gap-g1 md:grid-cols-2 xl:hidden">
+      <ul className="mt-4 grid grid-cols-1 gap-g1 md:grid-cols-2 xl:hidden">
         {table.getRowModel().rows.length === 0 ? (
           <li className="rounded-card bg-white px-4 py-10 text-center text-ink-soft">
             {t('admin.orders.empty')}
@@ -642,27 +686,66 @@ function OrdersPage() {
         </table>
       </div>
 
-      {/* Pagination */}
-      <nav className="mt-4 flex items-center justify-between gap-3" aria-label="pagination">
-        <Button
-          variant="outline"
-          size="md"
-          disabled={data.page <= 1}
-          onClick={() => navigate({ search: (prev) => ({ ...prev, page: data.page - 1 }) })}
-        >
-          {t('admin.orders.prev')}
-        </Button>
-        <span className="text-sm text-ink-soft">
-          {t('admin.orders.pageOf', { page: data.page, pages })}
-        </span>
-        <Button
-          variant="outline"
-          size="md"
-          disabled={data.page >= pages}
-          onClick={() => navigate({ search: (prev) => ({ ...prev, page: data.page + 1 }) })}
-        >
-          {t('admin.orders.next')}
-        </Button>
+      {/* Pagination: per-page choice and range, then previous / page / next. */}
+      <nav
+        className="mt-4 flex flex-col gap-3 rounded-card bg-white p-3 ring-1 ring-sand-deep/50 sm:flex-row sm:items-center sm:justify-between"
+        aria-label={t('admin.orders.pagination')}
+      >
+        <div className="flex items-center justify-between gap-3 sm:justify-start">
+          <label className="inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap text-ink">
+            {t('admin.orders.perPage')}
+            <select
+              value={data.pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              className="field-input min-h-11 w-[5.5rem] tabular-nums"
+            >
+              {PAGE_SIZES.map((n) => (
+                <option key={n} value={n}>
+                  {formatNumber(n, locale)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <span className="text-sm whitespace-nowrap text-ink-soft tabular-nums">
+            {/* "11–20" always reads left to right, also in Arabic. */}
+            <bdi dir="ltr">
+              {formatNumber(
+                data.total ? Math.min((data.page - 1) * data.pageSize + 1, data.total) : 0,
+                locale,
+              )}
+              –{formatNumber(Math.min(data.page * data.pageSize, data.total), locale)}
+            </bdi>{' '}
+            {t('admin.orders.ofTotal', { total: formatNumber(data.total, locale) })}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-2">
+          {/* Phones: arrows only (the labels are named for screen readers). */}
+          <Button
+            variant="outline"
+            size="md"
+            disabled={data.page <= 1}
+            aria-label={t('admin.orders.prev')}
+            className="px-3 sm:px-5"
+            onClick={() => navigate({ search: (prev) => ({ ...prev, page: data.page - 1 }) })}
+          >
+            <ChevronLeft className="rtl:rotate-180" aria-hidden="true" />
+            <span className="hidden sm:inline">{t('admin.orders.prev')}</span>
+          </Button>
+          <span className="px-1 text-sm text-ink-soft tabular-nums">
+            {t('admin.orders.pageOf', { page: data.page, pages })}
+          </span>
+          <Button
+            variant="outline"
+            size="md"
+            disabled={data.page >= pages}
+            aria-label={t('admin.orders.next')}
+            className="px-3 sm:px-5"
+            onClick={() => navigate({ search: (prev) => ({ ...prev, page: data.page + 1 }) })}
+          >
+            <span className="hidden sm:inline">{t('admin.orders.next')}</span>
+            <ChevronRight className="rtl:rotate-180" aria-hidden="true" />
+          </Button>
+        </div>
       </nav>
     </div>
   )

@@ -412,7 +412,10 @@
       "markedUnpaid": "أُلغي الدفع لـ {count} طلب.",
       "unseenOnly": "الجديدة غير المفتوحة",
       "newBadge": "لم يُفتح",
-      "markAllSeen": "تحديد الكل كمقروء"
+      "markAllSeen": "تحديد الكل كمقروء",
+      "perPage": "في كل صفحة",
+      "pagination": "التنقل بين الصفحات",
+      "ofTotal": "من {total}"
     },
     "order": {
       "back": "رجوع إلى الطلبات",

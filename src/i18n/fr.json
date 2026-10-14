@@ -412,7 +412,10 @@
       "markedUnpaid": "Paiement annulé pour {count} commande(s).",
       "unseenOnly": "Nouvelles non ouvertes",
       "newBadge": "Non ouverte",
-      "markAllSeen": "Tout marquer comme vu"
+      "markAllSeen": "Tout marquer comme vu",
+      "perPage": "Par page",
+      "pagination": "Pagination",
+      "ofTotal": "sur {total}"
     },
     "order": {
       "back": "Retour aux commandes",

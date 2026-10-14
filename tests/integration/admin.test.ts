@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import type { Database } from '~/db/client'
 import * as schema from '~/db/schema'
 import { seed } from '~/db/seed-run'
+import { orderFiltersSchema } from '~/lib/admin-orders'
 import { deleteOffer, listOffers, saveOffer, savePricing } from '~/server/admin/offers'
 import {
   dashboardStats,
@@ -208,6 +209,22 @@ describe('admin order operations', () => {
 
     expect(await restoreOrders(db, actor(), [o.id])).toEqual({ restored: 1 })
     expect((await listOrders(db, { q: o.reference })).total).toBe(1)
+  })
+
+  it('pages orders 10 to 50 at a time (20 by default)', async () => {
+    for (const phone of ['0644000001', '0644000002', '0644000003']) await newOrder(phone)
+    const all = await listOrders(db, {})
+    expect(all.pageSize).toBe(20)
+    expect(all.total).toBeGreaterThanOrEqual(3)
+
+    const tenPerPage = await listOrders(db, { size: 10 })
+    expect(tenPerPage.pageSize).toBe(10)
+    expect(tenPerPage.rows.length).toBe(Math.min(10, all.total))
+
+    // Only the sizes on offer are accepted; anything else falls back to 20.
+    expect(orderFiltersSchema.parse({ size: '30' }).size).toBe(30)
+    expect(orderFiltersSchema.parse({ size: '25' }).size).toBeUndefined()
+    expect(orderFiltersSchema.parse({ size: '500' }).size).toBeUndefined()
   })
 
   it('keeps new orders unseen until opened, and records cash received', async () => {
