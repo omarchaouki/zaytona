@@ -1,8 +1,8 @@
-# Olive cooperative — landing page + admin
+# Huilerie El Hadaji (معصرة الهداجي لزيت الزيتون) — landing page + admin
 
-Bilingual (Arabic RTL / French LTR) landing page with cash-on-delivery ordering and an admin panel for an olive cooperative in Kalaat Sraghna, Morocco. Built with TanStack Start, PostgreSQL (Drizzle) and Tailwind CSS v4.
+Bilingual (Arabic RTL / French LTR) landing page with cash-on-delivery ordering and an admin panel for Huilerie El Hadaji (معصرة الهداجي لزيت الزيتون), an olive oil press in Louanasda, El Kelaâ des Sraghna, Morocco. Built with TanStack Start, PostgreSQL (Drizzle) and Tailwind CSS v4.
 
-Status: **ready for a first production deploy**: Arabic-first landing page, litre offers priced from the admin, 3-step order form (cash on delivery), ONSSA section, reviews with moderation, and the admin panel (orders, offers and prices, reviews, certificates, WhatsApp settings). See [PLAN.md](PLAN.md) for the plan and progress.
+Status: **ready for a first production deploy**: Arabic-first landing page, litre offers priced from the admin, 3-step order form (cash on delivery), ONSSA section, reviews with moderation, and the admin panel (orders, offers and prices, reviews, certificates, name, address and WhatsApp settings). See [PLAN.md](PLAN.md) for the plan and progress.
 
 ## Requirements
 

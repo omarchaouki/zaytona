@@ -160,13 +160,13 @@ export const demoFaqs: Array<{ qAr: string; aAr: string; qFr: string; aFr: strin
 export const privacyDraft = {
   ar: {
     title: 'سياسة الخصوصية',
-    html: `<p>تشرح هذه الصفحة كيف تجمع التعاونية معطياتك الشخصية وتستعملها، طبقاً للقانون رقم 09-08 المتعلق بحماية الأشخاص الذاتيين تجاه معالجة المعطيات ذات الطابع الشخصي.</p>
+    html: `<p>تشرح هذه الصفحة كيف تجمع المعصرة معطياتك الشخصية وتستعملها، طبقاً للقانون رقم 09-08 المتعلق بحماية الأشخاص الذاتيين تجاه معالجة المعطيات ذات الطابع الشخصي.</p>
 <h2>المعطيات التي نجمعها</h2>
 <ul><li>عند الطلب: الاسم، رقم الهاتف، المدينة، والعنوان والملاحظة إذا أضفتهما.</li><li>عند كتابة رأي: الاسم، المدينة إن أردت، ورقم الهاتف إن أردت (لا يُعرض أبداً، ونستعمله فقط للتحقق من أنك اشتريت منا).</li><li>معطيات تقنية: نحفظ عنوان IP في شكل مشفّر غير قابل للاسترجاع، لحماية الموقع من الرسائل المزعجة.</li></ul>
 <h2>لماذا نستعملها</h2>
 <ul><li>لمعالجة طلبك والتواصل معك لتأكيده وتوصيله.</li><li>لنشر رأيك بعد مراجعته إذا كتبت رأياً.</li><li>لحماية الموقع من الاستعمال المسيء.</li></ul>
 <h2>من يطّلع عليها</h2>
-<p>فريق التعاونية المكلف بالطلبات، وشركة التوصيل في حدود ما تحتاجه لإيصال الطلب (الاسم، الهاتف، العنوان). لا نبيع معطياتك ولا نؤجرها.</p>
+<p>فريق المعصرة المكلف بالطلبات، وشركة التوصيل في حدود ما تحتاجه لإيصال الطلب (الاسم، الهاتف، العنوان). لا نبيع معطياتك ولا نؤجرها.</p>
 <h2>مدة الحفظ</h2>
 <p>نحتفظ بمعطيات الطلب طوال المدة اللازمة لمعالجته وتتبعه، ثم وفق ما تفرضه الالتزامات القانونية والمحاسبية.</p>
 <h2>حقوقك</h2>
@@ -177,13 +177,13 @@ export const privacyDraft = {
   },
   fr: {
     title: 'Politique de confidentialité',
-    html: `<p>Cette page explique comment la coopérative collecte et utilise vos données personnelles, conformément à la loi n° 09-08 relative à la protection des personnes physiques à l’égard du traitement des données à caractère personnel.</p>
+    html: `<p>Cette page explique comment l’huilerie collecte et utilise vos données personnelles, conformément à la loi n° 09-08 relative à la protection des personnes physiques à l’égard du traitement des données à caractère personnel.</p>
 <h2>Les données collectées</h2>
 <ul><li>Lors d’une commande : nom, téléphone, ville, et l’adresse et la note si vous les indiquez.</li><li>Lors d’un avis : nom, ville (facultative) et téléphone (facultatif, jamais affiché, utilisé uniquement pour vérifier que vous avez acheté chez nous).</li><li>Données techniques : votre adresse IP est conservée sous forme chiffrée et irréversible, pour protéger le site contre le spam.</li></ul>
 <h2>À quoi elles servent</h2>
 <ul><li>Traiter votre commande et vous contacter pour la confirmer et la livrer.</li><li>Publier votre avis après modération, si vous en écrivez un.</li><li>Protéger le site contre les abus.</li></ul>
 <h2>Qui y a accès</h2>
-<p>L’équipe de la coopérative chargée des commandes, et le transporteur pour ce dont il a besoin pour livrer (nom, téléphone, adresse). Nous ne vendons ni ne louons vos données.</p>
+<p>L’équipe de l’huilerie chargée des commandes, et le transporteur pour ce dont il a besoin pour livrer (nom, téléphone, adresse). Nous ne vendons ni ne louons vos données.</p>
 <h2>Durée de conservation</h2>
 <p>Les données de commande sont conservées le temps nécessaire à son traitement et à son suivi, puis selon nos obligations légales et comptables.</p>
 <h2>Vos droits</h2>

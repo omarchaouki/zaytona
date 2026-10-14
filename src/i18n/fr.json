@@ -1,12 +1,12 @@
 {
   "meta": {
     "title": "Huile d'olive vierge extra d'El Kelaâ des Sraghna | Livraison partout au Maroc",
-    "description": "Huile d’olive vierge extra en direct d’une coopérative agricole d’El Kelaâ des Sraghna, autorisée par l’ONSSA. Livraison partout au Maroc, paiement à la livraison.",
+    "description": "Huile d’olive vierge extra en direct de l’huilerie El Hadaji à El Kelaâ des Sraghna, autorisée par l’ONSSA. Livraison partout au Maroc, paiement à la livraison.",
     "privacyTitle": "Politique de confidentialité",
     "termsTitle": "Conditions de vente"
   },
   "brand": {
-    "name": "Coopérative oléicole",
+    "name": "Huilerie El Hadaji",
     "place": "El Kelaâ des Sraghna",
     "homeLink": "Accueil"
   },
@@ -18,9 +18,9 @@
     "orderNow": "Commander"
   },
   "hero": {
-    "eyebrow": "Coopérative agricole à El Kelaâ des Sraghna",
+    "eyebrow": "Huilerie à El Kelaâ des Sraghna",
     "title": "L’une des *meilleures huiles du Maroc*, d’El Kelaâ des Sraghna à votre porte",
-    "subtitle": "En direct de la coopérative, livrée dans tout le Maroc. Vous ne payez qu'à la réception de votre commande.",
+    "subtitle": "En direct de l’huilerie, livrée dans tout le Maroc. Vous ne payez qu'à la réception de votre commande.",
     "ctaOrder": "Commander",
     "ctaWhatsapp": "Nous écrire sur WhatsApp",
     "imageAlt": "Olives vertes fraîchement récoltées, parmi leurs feuilles",
@@ -34,7 +34,7 @@
     "label": "Pourquoi commander en confiance",
     "onssa": "Agréé ONSSA",
     "natural": "100 % naturelle",
-    "direct": "Direct de la coopérative",
+    "direct": "Direct de l’huilerie",
     "cod": "Paiement à la livraison",
     "delivery": "Livraison dans tout le Maroc"
   },
@@ -51,7 +51,7 @@
     "empty": "Nos produits sont en cours de mise à jour. Écrivez-nous sur WhatsApp pour connaître ce qui est disponible.",
     "help": "Vous hésitez ?",
     "helpLink": "Posez-nous la question sur WhatsApp",
-    "eyebrow": "De la coopérative à votre table",
+    "eyebrow": "De l’huilerie à votre table",
     "perLiter": "{price} le litre",
     "customTitle": "Autre quantité",
     "customBody": "Indiquez le nombre de litres, de {min} à {max} L : le prix se calcule automatiquement.",
@@ -88,7 +88,7 @@
     "hours": "Horaires",
     "responseTime": "Délai de réponse",
     "delivered": "commandes livrées à nos clients",
-    "identityTitle": "Identité de la coopérative",
+    "identityTitle": "Identité de l’huilerie",
     "legalName": "Raison sociale",
     "ice": "ICE",
     "rc": "RC",
@@ -113,18 +113,18 @@
   "story": {
     "eyebrow": "Notre histoire",
     "title": "Des vergers d'El Kelaâ des Sraghna",
-    "body": "El Kelaâ des Sraghna, dans la région de Marrakech-Safi, est une terre d'oliviers. Notre coopérative réunit des agriculteurs de la région qui entretiennent leurs arbres et récoltent leurs olives à chaque saison.\n\nNous vendons notre huile et nos produits en direct, sans intermédiaire, pour qu'ils vous arrivent tels qu'ils sont sortis de la coopérative.",
+    "body": "El Kelaâ des Sraghna, dans la région de Marrakech-Safi, est une terre d'oliviers. Dans notre huilerie, nous pressons les olives de la région à chaque saison de récolte.\n\nNous vendons notre huile et nos produits en direct, sans intermédiaire, pour qu'ils vous arrivent tels qu'ils sont sortis de l’huilerie.",
     "imageAlt": "Huile d'olive versée d'une bouteille dans un bol",
     "processTitle": "De l'arbre à la bouteille",
     "process1Title": "Récolte",
-    "process1Body": "Les olives sont cueillies sur les arbres des coopérateurs pendant la saison de récolte.",
+    "process1Body": "Les olives sont cueillies sur les arbres des agriculteurs pendant la saison de récolte.",
     "process2Title": "Extraction",
     "process2Body": "L'huile est extraite par des procédés uniquement mécaniques, comme l'exige la catégorie vierge extra.",
     "process3Title": "Conservation",
     "process3Body": "L'huile est conservée à l'abri de la lumière et de la chaleur jusqu'à la mise en bouteille.",
     "process4Title": "Mise en bouteille",
-    "process4Body": "Elle est conditionnée à la coopérative et vous est expédiée directement.",
-    "galleryTitle": "La coopérative en images"
+    "process4Body": "Elle est conditionnée à l’huilerie et vous est expédiée directement.",
+    "galleryTitle": "L’huilerie en images"
   },
   "order": {
     "eyebrow": "Commande",
@@ -140,7 +140,7 @@
     "moreLink": "Écrivez-nous sur WhatsApp"
   },
   "finalCta": {
-    "title": "Votre huile, en direct de la coopérative",
+    "title": "Votre huile, en direct de l’huilerie",
     "body": "Une question avant de commander ? Écrivez-nous sur WhatsApp.",
     "order": "Commander",
     "whatsapp": "Nous écrire sur WhatsApp"
@@ -154,7 +154,7 @@
     "hours": "Horaires",
     "openMap": "Ouvrir dans Google Maps",
     "showMap": "Afficher la carte ici",
-    "mapTitle": "Emplacement de la coopérative",
+    "mapTitle": "Emplacement de l’huilerie",
     "follow": "Suivez-nous",
     "legal": "Informations légales",
     "privacy": "Confidentialité",
@@ -302,7 +302,7 @@
     },
     "login": {
       "title": "Connexion",
-      "subtitle": "Espace d’administration de la coopérative",
+      "subtitle": "Espace d’administration de l’huilerie",
       "email": "E-mail",
       "password": "Mot de passe",
       "submit": "Se connecter",
@@ -586,7 +586,16 @@
       "invalid": "Numéro invalide. Vérifiez-le.",
       "save": "Enregistrer",
       "saved": "Enregistré.",
-      "error": "Enregistrement impossible. Réessayez."
+      "error": "Enregistrement impossible. Réessayez.",
+      "identityTitle": "Nom et adresse de l’huilerie",
+      "nameAr": "Nom en arabe",
+      "nameFr": "Nom en français",
+      "nameHint": "Affiché dans l’en-tête et le pied de page du site, dans les résultats de recherche et sur le bon de livraison.",
+      "addressAr": "Adresse en arabe",
+      "addressFr": "Adresse en français",
+      "addressHint": "Affichée dans le pied de page. Laissez vide pour la masquer.",
+      "required": "Ce champ est obligatoire.",
+      "contactTitle": "WhatsApp et téléphone"
     },
     "notify": {
       "label": "Notifications de nouvelles commandes",
@@ -651,7 +660,7 @@
     "writeHint": "Vous avez commandé ? Partagez votre expérience.",
     "empty": "Aucun avis publié pour l’instant. Soyez le premier à partager votre expérience.",
     "verified": "Achat vérifié",
-    "reply": "Réponse de la coopérative",
+    "reply": "Réponse de l’huilerie",
     "more": "Voir plus d’avis",
     "photoAlt": "Photo ajoutée par {name}",
     "openPhoto": "Agrandir la photo",
@@ -680,7 +689,7 @@
       "submit": "Publier mon avis",
       "submitting": "Envoi…",
       "thanksTitle": "Merci !",
-      "thanks": "Votre avis est bien reçu ; il apparaîtra ici après validation par la coopérative.",
+      "thanks": "Votre avis est bien reçu ; il apparaîtra ici après validation par l’huilerie.",
       "cancel": "Annuler"
     },
     "errors": {
@@ -705,8 +714,8 @@
     "onssaTitle": "Autorisé par l’ONSSA",
     "onssaBody": "Notre unité est autorisée par l’Office national de sécurité sanitaire des produits alimentaires, n° {number}.",
     "originTitle": "Une origine connue : El Kelaâ des Sraghna",
-    "originBody": "Vous savez d’où vient votre huile : des vergers des agriculteurs de la région, membres de la coopérative.",
-    "directTitle": "En direct de la coopérative",
+    "originBody": "Vous savez d’où vient votre huile : des vergers des agriculteurs de la région.",
+    "directTitle": "En direct de l’huilerie",
     "directBody": "Sans intermédiaire : un prix juste pour vous et pour celui qui a récolté les olives.",
     "extraTitle": "Vierge extra, extraction mécanique",
     "extraBody": "L’huile est extraite par des procédés uniquement mécaniques, comme l’exige la catégorie « vierge extra ».",

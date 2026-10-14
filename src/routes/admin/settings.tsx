@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
-import { CheckCircle2, Phone } from 'lucide-react'
+import { CheckCircle2, MapPin, Phone, Store } from 'lucide-react'
 import { useId, useState } from 'react'
 import { DeliverySettings, deliveryQuery } from '~/components/admin/DeliverySettings'
 import { MarketingSettings, marketingQuery } from '~/components/admin/MarketingSettings'
@@ -35,8 +35,21 @@ function SettingsPage() {
   const { data } = useQuery({ ...contactQuery, initialData: Route.useLoaderData() })
   const save = useServerFn(adminSaveContactSettings)
   const queryClient = useQueryClient()
-  const ids = { wa: useId(), phone: useId() }
-  const [errors, setErrors] = useState<{ whatsapp?: boolean; phone?: boolean; form?: boolean }>({})
+  const ids = {
+    wa: useId(),
+    phone: useId(),
+    nameAr: useId(),
+    nameFr: useId(),
+    addressAr: useId(),
+    addressFr: useId(),
+  }
+  const [errors, setErrors] = useState<{
+    whatsapp?: boolean
+    phone?: boolean
+    nameAr?: boolean
+    nameFr?: boolean
+    form?: boolean
+  }>({})
   const [saved, setSaved] = useState(false)
   const [busy, setBusy] = useState(false)
   const isOwner = admin.role === 'owner'
@@ -48,11 +61,24 @@ function SettingsPage() {
     setSaved(false)
     setErrors({})
     try {
+      const field = (name: string) => String(fd.get(name) ?? '')
       const res = await save({
-        data: { whatsapp: String(fd.get('whatsapp') ?? ''), phone: String(fd.get('phone') ?? '') },
+        data: {
+          whatsapp: field('whatsapp'),
+          phone: field('phone'),
+          nameAr: field('nameAr'),
+          nameFr: field('nameFr'),
+          addressAr: field('addressAr'),
+          addressFr: field('addressFr'),
+        },
       })
       if (!res.ok) {
-        setErrors({ whatsapp: Boolean(res.errors.whatsapp), phone: Boolean(res.errors.phone) })
+        setErrors({
+          whatsapp: Boolean(res.errors.whatsapp),
+          phone: Boolean(res.errors.phone),
+          nameAr: Boolean(res.errors.nameAr),
+          nameFr: Boolean(res.errors.nameFr),
+        })
         return
       }
       setSaved(true)
@@ -79,6 +105,99 @@ function SettingsPage() {
         className="mt-g3 rounded-card bg-white p-g3 shadow-lift ring-1 ring-sand-deep/50"
       >
         <fieldset disabled={!isOwner || busy} className="grid gap-g3">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-olive">
+            <Store className="size-5 text-olive-600" aria-hidden="true" />
+            {t('admin.settings.identityTitle')}
+          </h2>
+          <div className="grid gap-g2 sm:grid-cols-2">
+            <div>
+              <label htmlFor={ids.nameAr} className={label}>
+                {t('admin.settings.nameAr')}
+              </label>
+              <input
+                id={ids.nameAr}
+                name="nameAr"
+                required
+                maxLength={120}
+                dir="rtl"
+                lang="ar"
+                defaultValue={data.nameAr}
+                aria-invalid={errors.nameAr || undefined}
+                className="field-input"
+              />
+              {errors.nameAr ? (
+                <p className="mt-1.5 text-sm font-medium text-danger">
+                  {t('admin.settings.required')}
+                </p>
+              ) : null}
+            </div>
+            <div>
+              <label htmlFor={ids.nameFr} className={label}>
+                {t('admin.settings.nameFr')}
+              </label>
+              <input
+                id={ids.nameFr}
+                name="nameFr"
+                required
+                maxLength={120}
+                dir="ltr"
+                lang="fr"
+                defaultValue={data.nameFr}
+                aria-invalid={errors.nameFr || undefined}
+                className="field-input"
+              />
+              {errors.nameFr ? (
+                <p className="mt-1.5 text-sm font-medium text-danger">
+                  {t('admin.settings.required')}
+                </p>
+              ) : null}
+            </div>
+            <p className="-mt-g1 text-sm text-ink-soft sm:col-span-2">
+              {t('admin.settings.nameHint')}
+            </p>
+          </div>
+          <div className="grid gap-g2 sm:grid-cols-2">
+            <div>
+              <label htmlFor={ids.addressAr} className={label}>
+                <MapPin className="size-5 text-olive-600" aria-hidden="true" />
+                {t('admin.settings.addressAr')}
+              </label>
+              <textarea
+                id={ids.addressAr}
+                name="addressAr"
+                rows={2}
+                maxLength={300}
+                dir="rtl"
+                lang="ar"
+                defaultValue={data.addressAr ?? ''}
+                className="field-input py-3"
+              />
+            </div>
+            <div>
+              <label htmlFor={ids.addressFr} className={label}>
+                <MapPin className="size-5 text-olive-600" aria-hidden="true" />
+                {t('admin.settings.addressFr')}
+              </label>
+              <textarea
+                id={ids.addressFr}
+                name="addressFr"
+                rows={2}
+                maxLength={300}
+                dir="ltr"
+                lang="fr"
+                defaultValue={data.addressFr ?? ''}
+                className="field-input py-3"
+              />
+            </div>
+            <p className="-mt-g1 text-sm text-ink-soft sm:col-span-2">
+              {t('admin.settings.addressHint')}
+            </p>
+          </div>
+
+          <h2 className="mt-g1 flex items-center gap-2 border-t border-sand-deep/50 pt-g3 text-lg font-bold text-olive">
+            <WhatsappIcon className="size-5 text-whatsapp-deep" />
+            {t('admin.settings.contactTitle')}
+          </h2>
           <div>
             <label htmlFor={ids.wa} className={label}>
               <WhatsappIcon className="size-5 text-whatsapp-deep" />

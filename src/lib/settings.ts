@@ -20,8 +20,8 @@ export const settingsSchemas = {
   }),
 
   identity: z.object({
-    nameAr: z.string().trim().min(1).max(120).default('تعاونية الزيتون'),
-    nameFr: z.string().trim().min(1).max(120).default('Coopérative oléicole'),
+    nameAr: z.string().trim().min(1).max(120).default('معصرة الهداجي لزيت الزيتون'),
+    nameFr: z.string().trim().min(1).max(120).default('Huilerie El Hadaji'),
     legalName: nullableText,
     ice: nullableText,
     rc: nullableText,
@@ -36,8 +36,18 @@ export const settingsSchemas = {
       .max(4)
       .default([]),
     email: z.email().nullable().default(null),
-    addressAr: nullableText,
-    addressFr: nullableText,
+    addressAr: z
+      .string()
+      .trim()
+      .max(2000)
+      .nullable()
+      .default('الوناسدة، قلعة السراغنة 43000، المغرب'),
+    addressFr: z
+      .string()
+      .trim()
+      .max(2000)
+      .nullable()
+      .default('Louanasda, El Kelaâ des Sraghna 43000, Maroc'),
     /** Link that opens the location (Google Maps share link). */
     mapUrl: nullableUrl,
     /** Google Maps embed URL, loaded only when the visitor asks for the map. */
@@ -84,7 +94,7 @@ export const settingsSchemas = {
     /** Cooperative → customer message from the admin order page. */
     customerAr: z
       .string()
-      .default('السلام عليكم {name}، نتواصل معكم من التعاونية بخصوص طلبكم رقم {reference}.'),
+      .default('السلام عليكم {name}، نتواصل معكم من المعصرة بخصوص طلبكم رقم {reference}.'),
     customerFr: z
       .string()
       .default('Bonjour {name}, nous vous contactons au sujet de votre commande {reference}.'),

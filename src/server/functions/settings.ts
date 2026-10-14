@@ -14,29 +14,50 @@ export const adminGetContactSettings = createServerFn({ method: 'GET' })
   .middleware([adminAuth])
   .handler(async () => {
     const s = await getSettings(db())
-    return { whatsapp: s.whatsapp.number, phone: s.contact.phones[0] ?? null }
+    return {
+      whatsapp: s.whatsapp.number,
+      phone: s.contact.phones[0] ?? null,
+      nameAr: s.identity.nameAr,
+      nameFr: s.identity.nameFr,
+      addressAr: s.contact.addressAr,
+      addressFr: s.contact.addressFr,
+    }
   })
 
 /**
  * Empty clears a value (an empty WhatsApp number hides every WhatsApp button).
  * Any common Moroccan or international format is accepted and normalised.
+ * The business name is required in both languages; the address is optional.
  */
 export const adminSaveContactSettings = createServerFn({ method: 'POST' })
   .middleware([ownerOnly])
-  .inputValidator(z.object({ whatsapp: z.string().max(40), phone: z.string().max(40) }))
+  .inputValidator(
+    z.object({
+      whatsapp: z.string().max(40),
+      phone: z.string().max(40),
+      nameAr: z.string().max(120),
+      nameFr: z.string().max(120),
+      addressAr: z.string().max(300),
+      addressFr: z.string().max(300),
+    }),
+  )
   .handler(async ({ data, context }) => {
     const whatsapp = data.whatsapp.trim() ? normalizeWhatsappNumber(data.whatsapp) : null
     const phone = data.phone.trim() ? normalizeMoroccanPhone(data.phone) : null
     const errors: Record<string, 'invalid'> = {}
     if (data.whatsapp.trim() && !whatsapp) errors.whatsapp = 'invalid'
     if (data.phone.trim() && !phone) errors.phone = 'invalid'
+    const nameAr = data.nameAr.trim()
+    const nameFr = data.nameFr.trim()
+    if (!nameAr) errors.nameAr = 'invalid'
+    if (!nameFr) errors.nameFr = 'invalid'
     if (Object.keys(errors).length) return { ok: false as const, errors }
 
     const database = db()
     const current = await getSettings(database)
     const adminId = context.session.admin.id
     await database.transaction(async (tx) => {
-      const upsert = (key: 'whatsapp' | 'contact', value: unknown) =>
+      const upsert = (key: 'whatsapp' | 'contact' | 'identity', value: unknown) =>
         tx
           .insert(settings)
           .values({ key, value, updatedBy: adminId })
@@ -46,13 +67,19 @@ export const adminSaveContactSettings = createServerFn({ method: 'POST' })
           })
       await upsert('whatsapp', { number: whatsapp })
       const others = current.contact.phones.slice(1)
-      await upsert('contact', { ...current.contact, phones: phone ? [phone, ...others] : others })
+      await upsert('contact', {
+        ...current.contact,
+        phones: phone ? [phone, ...others] : others,
+        addressAr: data.addressAr.trim() || null,
+        addressFr: data.addressFr.trim() || null,
+      })
+      await upsert('identity', { ...current.identity, nameAr, nameFr })
       await tx.insert(auditLogs).values({
         adminId,
         action: 'contact_settings_update',
         entity: 'settings',
         entityId: 'whatsapp',
-        meta: { whatsapp, phone },
+        meta: { whatsapp, phone, nameAr, nameFr },
         ip: context.ip,
       })
     })

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { MapPin } from 'lucide-react'
 import { useState } from 'react'
 import { LOCALE_META, otherLocale, useLocale, useSwitchLocaleHref, useT } from '~/i18n'
+import { moroccoYear } from '~/lib/format'
 import { formatPhoneDisplay } from '~/lib/phone'
 import { ArchMark } from './icons'
 import { OliveBranch } from './OliveBranch'
@@ -25,7 +26,7 @@ export function SiteFooter() {
   const socials = Object.entries(contact.socials).filter(
     (e): e is [keyof typeof SOCIAL_LABELS, string] => Boolean(e[1]),
   )
-  const year = new Date().getFullYear()
+  const year = moroccoYear()
 
   const linkClass =
     'tap inline-flex items-center rounded text-limewash/90 underline-offset-4 hover:text-limewash hover:underline'

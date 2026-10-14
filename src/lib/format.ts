@@ -31,6 +31,11 @@ export function moroccoDay(date: Date): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Casablanca' }).format(date)
 }
 
+/** The current year in Morocco, e.g. for the footer copyright (never hard-coded). */
+export function moroccoYear(date = new Date()): number {
+  return Number(moroccoDay(date).slice(0, 4))
+}
+
 /**
  * "2026-10-09" → "9 oct. 2026" / "09‏/10‏/2026". The day is read and printed in
  * UTC so the server and the browser always produce the same text (anything
